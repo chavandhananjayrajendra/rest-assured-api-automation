@@ -176,11 +176,7 @@ This helps keep environment-specific configuration separate from test logic.
 
 This project demonstrates practical experience with REST API automation, HTTP methods, response validation, reusable framework components, Maven test execution, Git version control, and CI/CD pipeline integration.
 
-## Author
 
-**Dhananjay Chavan**
-
-GitHub: [chavandhanajayrajendra](https://github.com/chavandhanajayrajendra)
 
 ---
 
