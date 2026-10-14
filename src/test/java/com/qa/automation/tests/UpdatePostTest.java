@@ -3,6 +3,7 @@ package com.qa.automation.tests;
 
 import com.qa.automation.base.BaseTest;
 import io.restassured.http.ContentType;
+import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
 import java.util.HashMap;
@@ -14,7 +15,7 @@ import static org.hamcrest.Matchers.notNullValue;
 
 public class UpdatePostTest extends BaseTest {
 
-    // Scenario 1: PUT - Update the complete post
+    // Scenario 1: PUT - Update complete post
     @Test
     public void updateCompletePostUsingPut() {
 
@@ -24,13 +25,27 @@ public class UpdatePostTest extends BaseTest {
         payload.put("body", "Updated body using PUT");
         payload.put("userId", 1);
 
-        given()
-                .spec(requestSpec)
-                .contentType(ContentType.JSON)
-                .body(payload)
-                .when()
-                .put("/posts/1")
-                .then()
+        System.out.println("\n========== PUT SCENARIO 1 ==========");
+        System.out.println("INPUT METHOD: PUT");
+        System.out.println("INPUT ENDPOINT: /posts/1");
+        System.out.println("INPUT PAYLOAD: " + payload);
+
+        Response response =
+                given()
+                        .spec(requestSpec)
+                        .contentType(ContentType.JSON)
+                        .body(payload)
+                        .log().all()
+                        .when()
+                        .put("/posts/1");
+
+        System.out.println("OUTPUT STATUS: " + response.getStatusCode());
+        System.out.println("OUTPUT CONTENT TYPE: "
+                + response.getContentType());
+        System.out.println("OUTPUT BODY: ");
+        response.prettyPrint();
+
+        response.then()
                 .statusCode(200)
                 .body("id", equalTo(1))
                 .body("title", equalTo("Updated Automation Title"))
@@ -38,7 +53,7 @@ public class UpdatePostTest extends BaseTest {
                 .body("userId", equalTo(1));
     }
 
-    // Scenario 2: PUT - Verify updated fields are returned
+    // Scenario 2: PUT - Verify returned fields
     @Test
     public void verifyPutResponseFields() {
 
@@ -48,39 +63,63 @@ public class UpdatePostTest extends BaseTest {
         payload.put("body", "Validating PUT response");
         payload.put("userId", 2);
 
-        given()
-                .spec(requestSpec)
-                .contentType(ContentType.JSON)
-                .body(payload)
-                .when()
-                .put("/posts/2")
-                .then()
+        System.out.println("\n========== PUT SCENARIO 2 ==========");
+        System.out.println("INPUT METHOD: PUT");
+        System.out.println("INPUT ENDPOINT: /posts/2");
+        System.out.println("INPUT PAYLOAD: " + payload);
+
+        Response response =
+                given()
+                        .spec(requestSpec)
+                        .contentType(ContentType.JSON)
+                        .body(payload)
+                        .log().all()
+                        .when()
+                        .put("/posts/2");
+
+        System.out.println("OUTPUT STATUS: " + response.getStatusCode());
+        System.out.println("OUTPUT BODY: ");
+        response.prettyPrint();
+
+        response.then()
                 .statusCode(200)
                 .body("id", equalTo(2))
                 .body("title", equalTo("Second Updated Post"))
                 .body("body", notNullValue());
     }
 
-    // Scenario 3: PATCH - Update only the title
+    // Scenario 3: PATCH - Update title only
     @Test
     public void updateTitleUsingPatch() {
 
         Map<String, Object> payload = new HashMap<>();
         payload.put("title", "Patched Title");
 
-        given()
-                .spec(requestSpec)
-                .contentType(ContentType.JSON)
-                .body(payload)
-                .when()
-                .patch("/posts/1")
-                .then()
+        System.out.println("\n========== PATCH SCENARIO 1 ==========");
+        System.out.println("INPUT METHOD: PATCH");
+        System.out.println("INPUT ENDPOINT: /posts/1");
+        System.out.println("INPUT PAYLOAD: " + payload);
+
+        Response response =
+                given()
+                        .spec(requestSpec)
+                        .contentType(ContentType.JSON)
+                        .body(payload)
+                        .log().all()
+                        .when()
+                        .patch("/posts/1");
+
+        System.out.println("OUTPUT STATUS: " + response.getStatusCode());
+        System.out.println("OUTPUT BODY: ");
+        response.prettyPrint();
+
+        response.then()
                 .statusCode(200)
                 .body("id", equalTo(1))
                 .body("title", equalTo("Patched Title"));
     }
 
-    // Scenario 4: PATCH - Update multiple selected fields
+    // Scenario 4: PATCH - Update title and body
     @Test
     public void updateTitleAndBodyUsingPatch() {
 
@@ -88,16 +127,29 @@ public class UpdatePostTest extends BaseTest {
         payload.put("title", "Updated Selected Fields");
         payload.put("body", "Only selected fields sent in PATCH");
 
-        given()
-                .spec(requestSpec)
-                .contentType(ContentType.JSON)
-                .body(payload)
-                .when()
-                .patch("/posts/2")
-                .then()
+        System.out.println("\n========== PATCH SCENARIO 2 ==========");
+        System.out.println("INPUT METHOD: PATCH");
+        System.out.println("INPUT ENDPOINT: /posts/2");
+        System.out.println("INPUT PAYLOAD: " + payload);
+
+        Response response =
+                given()
+                        .spec(requestSpec)
+                        .contentType(ContentType.JSON)
+                        .body(payload)
+                        .log().all()
+                        .when()
+                        .patch("/posts/2");
+
+        System.out.println("OUTPUT STATUS: " + response.getStatusCode());
+        System.out.println("OUTPUT BODY: ");
+        response.prettyPrint();
+
+        response.then()
                 .statusCode(200)
                 .body("id", equalTo(2))
                 .body("title", equalTo("Updated Selected Fields"))
-                .body("body", equalTo("Only selected fields sent in PATCH"));
+                .body("body", equalTo(
+                        "Only selected fields sent in PATCH"));
     }
 }
